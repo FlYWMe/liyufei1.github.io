@@ -94,7 +94,7 @@
 <meta property="og:image" content="http://yoursite.com/2018/01/02/product-quantization-for-NN-search/image6.png">
 <meta property="og:image" content="http://yoursite.com/2018/01/02/product-quantization-for-NN-search/image7.png">
 <meta property="og:image" content="http://yoursite.com/2018/01/02/product-quantization-for-NN-search/image8.png">
-<meta property="og:updated_time" content="2018-01-03T05:44:31.702Z">
+<meta property="og:updated_time" content="2018-01-03T05:46:34.937Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="product-quantization-for-NN-search">
 <meta name="twitter:description" content="Product quantization for nearest neighbor search 最近研究了product quantization这篇论文: paper对图像检索有了很多新认识，以后还要多看论文啊。  摘要这篇文章主要介绍了用于实现最近邻搜索的乘积量化方法，主要思想：将一个高维向量压缩至低维空间的笛卡尔积，再在子空间内进行量化（K-means构造码本）用一个很短的编码表示，查询矢">
@@ -392,9 +392,9 @@
 <li>将查询向量x量化，选出这距离最近的w个质心qc，取出相应w倒排链</li>
 <li>查询向量误差 r(x)=x-q(x)</li>
 <li>计算误差与质心的距离（y误差的质心q(r(y))）,d(Uj(r(x)), Cj,i)通过异步方式计算出PQ距离</li>
-<li>堆排序选topk<br><strong>数据集</strong><br><img src="image6.png" alt=""><br><strong>实验结果</strong><br><img src="image7.png" alt=""><br><img src="image8.png" alt=""></li>
+<li>堆排序选topk<h3 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h3><img src="image6.png" alt=""><h3 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h3><img src="image7.png" alt=""><br><img src="image8.png" alt=""></li>
 </ol>
-<p><strong>参考文献</strong><br><a href="http://yongyuan.name/blog/ann-search.html" target="_blank" rel="noopener">http://yongyuan.name/blog/ann-search.html</a><br><a href="http://blog.csdn.net/mqfcu8/article/details/45023987" target="_blank" rel="noopener">http://blog.csdn.net/mqfcu8/article/details/45023987</a></p>
+<h3 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h3><p><a href="http://yongyuan.name/blog/ann-search.html" target="_blank" rel="noopener">http://yongyuan.name/blog/ann-search.html</a><br><a href="http://blog.csdn.net/mqfcu8/article/details/45023987" target="_blank" rel="noopener">http://blog.csdn.net/mqfcu8/article/details/45023987</a></p>
 
       
     </div>
@@ -562,7 +562,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Product-quantization-for-nearest-neighbor-search"><span class="nav-number">1.</span> <span class="nav-text">Product quantization for nearest neighbor search</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#摘要"><span class="nav-number">1.0.1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#乘积量化"><span class="nav-number">1.0.2.</span> <span class="nav-text">乘积量化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#倒排乘积量化"><span class="nav-number">1.0.3.</span> <span class="nav-text">倒排乘积量化</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Product-quantization-for-nearest-neighbor-search"><span class="nav-number">1.</span> <span class="nav-text">Product quantization for nearest neighbor search</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#摘要"><span class="nav-number">1.0.1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#乘积量化"><span class="nav-number">1.0.2.</span> <span class="nav-text">乘积量化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#倒排乘积量化"><span class="nav-number">1.0.3.</span> <span class="nav-text">倒排乘积量化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据集"><span class="nav-number">1.0.4.</span> <span class="nav-text">数据集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实验结果"><span class="nav-number">1.0.5.</span> <span class="nav-text">实验结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考文献"><span class="nav-number">1.0.6.</span> <span class="nav-text">参考文献</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
