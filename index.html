@@ -181,7 +181,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            Home
           </a>
         </li>
       
@@ -191,7 +191,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
             
-            Über
+            About
           </a>
         </li>
       
@@ -211,7 +211,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
             
-            Kategorien
+            Categories
           </a>
         </li>
       
@@ -221,7 +221,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archiv
+            Archives
           </a>
         </li>
       
@@ -278,6 +278,153 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/02/product-quantization-for-NN-search/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="fly">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dreamer fly's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/01/02/product-quantization-for-NN-search/" itemprop="url">product-quantization-for-NN-search</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-02T21:25:28+08:00">
+                2018-01-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Product-quantization-for-nearest-neighbor-search"><a href="#Product-quantization-for-nearest-neighbor-search" class="headerlink" title="Product quantization for nearest neighbor search"></a>Product quantization for nearest neighbor search</h1><p> 最近研究了product quantization这篇论文: <a href="https://lear.inrialpes.fr/pubs/2011/JDS11/jegou_searching_with_quantization.pdf" target="_blank" rel="noopener">paper</a><br>对图像检索有了很多新认识，以后还要多看论文啊。</p>
+<hr>
+<h3 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h3><p>这篇文章主要介绍了用于实现最近邻搜索的乘积量化方法，主要思想：将一个高维向量压缩至低维空间的笛卡尔积，再在子空间内进行量化（K-means构造码本）用一个很短的编码表示，查询矢量通过异步方式计算与码本的距离得到相似度。在SIFT和GIST数据集上实验结果比HE、FLANN好，加入倒排文件系统后实验结果更好。</p>
+<h3 id="乘积量化"><a href="#乘积量化" class="headerlink" title="乘积量化"></a>乘积量化</h3><p><strong>矢量量化</strong>（vector quantization）：将一个向量空间中的点用其中一个有限子集来进行编码的过程。即定义一个映射函数称为量化器q，将高维空间中的向量映射为低维空间中的质心，质心集合称为码本，大小为k，一个质心内的所有向量构成了一个Voronoi cell<br><img src="image1.png" alt=""></p>
+<p><strong>乘积量化</strong>（product quantization）：本质上为低维子空间上分别做矢量量化再做笛卡尔积，一个乘积量化构造码本的过程如下<br><img src="image2.png" alt=""></p>
+<p>假设样本维度为D=128 m=4，D’=D/m=32，对每个子向量进行K-means聚类，图中聚为256类，每个子向量有256个质心称为码本 大小为k’ (k=(k’)^m)，通过训练每个子段样本将所有子向量用质心近似得到短编码，m=1时PQ回退为矢量量化，m=D时PQ相当于对每一维都聚类算出码本。<br><img src="image3.png" alt=""><br>建立完码本之后便开始计算距离查询样本。距离计算有对称非对称两种方式，文中结论为非对称距离损失小，也就是将数据集中向量量化而查询向量不做处理。<strong>具体查询过程：</strong>将查询向量分段后计算每个子段到对应256个质心的距离，得到256*4的距离矩阵作为距离池（这样在检索时只用查表复杂度O(1)）。在计算库中向量到查询向量距离时，分别到距离池中取出相应子段距离然后相加，选出topk后再re-ranking。</p>
+<p><img src="image4.png" alt=""></p>
+<h3 id="倒排乘积量化"><a href="#倒排乘积量化" class="headerlink" title="倒排乘积量化"></a>倒排乘积量化</h3><p>乘积量化计算距离进行NN-search虽然快，但是检索时还需要将库中所有向量的子段距离相加选出距离最短的，但实际上我们只关心那些跟查询向量相近的。论文提出了倒排文件系统，再PQ之前先进行粗量化，也就是先对训练样本进行聚类比如1024类，然后对实际向量与质心的距离（残差向量）做乘积量化，具体步骤如下图。</p>
+<blockquote>
+<p><strong>用PQ处理残差而不是原始数据的原因：</strong>残差的方差或者能量比原始数据的方差或者能量要小（The energy of the residual vector is small compared to that of the vector itself.）</p>
+</blockquote>
+<p><img src="image5.png" alt=""><br><strong>倒排索引的建立和查询过程：</strong><br><strong>Indexing</strong></p>
+<ol>
+<li>将库中向量量化 y–&gt;q(y)</li>
+<li>计算误差 r(y)=y-q(y)</li>
+<li>乘积量化误差 r(y)–&gt;q(r(y)) 产生低维编码</li>
+<li>加入倒排文件系统q(y)，包括向量id和乘积量化编码</li>
+</ol>
+<p><strong>Searching</strong></p>
+<ol>
+<li>将查询向量x量化，选出这距离最近的w个质心qc，取出相应w倒排链</li>
+<li>查询向量误差 r(x)=x-q(x)</li>
+<li>计算误差与质心的距离（y误差的质心q(r(y))）,d(Uj(r(x)), Cj,i)通过异步方式计算出PQ距离</li>
+<li>堆排序选topk<br><strong>数据集</strong><br><img src="image6.png" alt=""><br><strong>实验结果</strong><br><img src="image7.png" alt=""><br><img src="image8.png" alt=""></li>
+</ol>
+<p><strong>参考文献</strong><br><a href="http://yongyuan.name/blog/ann-search.html" target="_blank" rel="noopener">http://yongyuan.name/blog/ann-search.html</a><br><a href="http://blog.csdn.net/mqfcu8/article/details/45023987" target="_blank" rel="noopener">http://blog.csdn.net/mqfcu8/article/details/45023987</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/23/Git-搭建-blog/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -307,7 +454,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-23T23:57:54+08:00">
                 2017-12-23
@@ -487,7 +634,7 @@ branch: master
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-23T15:19:24+08:00">
                 2017-12-23
@@ -625,8 +772,8 @@ branch: master
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">2</span>
-                  <span class="site-state-item-name">Artikel</span>
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">posts</span>
                 </a>
               </div>
             
@@ -638,8 +785,8 @@ branch: master
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">1</span>
-                  <span class="site-state-item-name">Tags</span>
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">tags</span>
                 </a>
               </div>
             
@@ -677,7 +824,7 @@ branch: master
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -687,7 +834,7 @@ branch: master
 </div>
 
 
-  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
