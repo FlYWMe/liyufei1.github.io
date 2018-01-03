@@ -181,7 +181,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Home
+            Startseite
           </a>
         </li>
       
@@ -191,7 +191,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
             
-            About
+            Über
           </a>
         </li>
       
@@ -211,7 +211,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
             
-            Categories
+            Kategorien
           </a>
         </li>
       
@@ -221,7 +221,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archives
+            Archiv
           </a>
         </li>
       
@@ -307,7 +307,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-02T21:25:28+08:00">
                 2018-01-02
@@ -358,7 +358,10 @@
 <p><strong>乘积量化</strong>（product quantization）：本质上为低维子空间上分别做矢量量化再做笛卡尔积，一个乘积量化构造码本的过程如下<br><img src="image2.png" alt=""></p>
 <p>假设样本维度为D=128 m=4，D’=D/m=32，对每个子向量进行K-means聚类，图中聚为256类，每个子向量有256个质心称为码本 大小为k’ (k=(k’)^m)，通过训练每个子段样本将所有子向量用质心近似得到短编码，m=1时PQ回退为矢量量化，m=D时PQ相当于对每一维都聚类算出码本。<br><img src="image3.png" alt=""><br>建立完码本之后便开始计算距离查询样本。距离计算有对称非对称两种方式，文中结论为非对称距离损失小，也就是将数据集中向量量化而查询向量不做处理。<strong>具体查询过程：</strong>将查询向量分段后计算每个子段到对应256个质心的距离，得到256*4的距离矩阵作为距离池（这样在检索时只用查表复杂度O(1)）。在计算库中向量到查询向量距离时，分别到距离池中取出相应子段距离然后相加，选出topk后再re-ranking。</p>
 <p><img src="image4.png" alt=""></p>
-<h3 id="倒排乘积量化"><a href="#倒排乘积量化" class="headerlink" title="倒排乘积量化"></a>倒排乘积量化</h3><p>乘积量化计算距离进行NN-search虽然快，但是检索时还需要将库中所有向量的子段距离相加选出距离最短的，但实际上我们只关心那些跟查询向量相近的。论文提出了倒排文件系统，再PQ之前先进行粗量化，也就是先对训练样本进行聚类比如1024类，然后对实际向量与质心的距离（残差向量）做乘积量化，具体步骤如下图。</p>
+<h3 id="倒排乘积量化"><a href="#倒排乘积量化" class="headerlink" title="倒排乘积量化"></a>倒排乘积量化</h3><blockquote>
+<p>IVFADC:an inverted ﬁle system with the asymmetric distance computation .</p>
+</blockquote>
+<p>乘积量化计算距离进行NN-search虽然快，但是检索时还需要将库中所有向量的子段距离相加选出距离最短的，但实际上我们只关心那些跟查询向量相近的。论文提出了倒排文件系统，再PQ之前先进行粗量化，也就是先对训练样本进行聚类比如1024类，然后对实际向量与质心的距离（残差向量）做乘积量化，具体步骤如下图。</p>
 <blockquote>
 <p><strong>用PQ处理残差而不是原始数据的原因：</strong>残差的方差或者能量比原始数据的方差或者能量要小（The energy of the residual vector is small compared to that of the vector itself.）</p>
 </blockquote>
@@ -374,9 +377,11 @@
 <li>将查询向量x量化，选出这距离最近的w个质心qc，取出相应w倒排链</li>
 <li>查询向量误差 r(x)=x-q(x)</li>
 <li>计算误差与质心的距离（y误差的质心q(r(y))）,d(Uj(r(x)), Cj,i)通过异步方式计算出PQ距离</li>
-<li>堆排序选topk<h3 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h3><img src="image6.png" alt=""><h3 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h3><img src="image7.png" alt=""><br><img src="image8.png" alt=""></li>
+<li>堆排序选topk</li>
 </ol>
-<h3 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h3><p><a href="http://yongyuan.name/blog/ann-search.html" target="_blank" rel="noopener">http://yongyuan.name/blog/ann-search.html</a><br><a href="http://blog.csdn.net/mqfcu8/article/details/45023987" target="_blank" rel="noopener">http://blog.csdn.net/mqfcu8/article/details/45023987</a></p>
+<h3 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h3><p><img src="image6.png" alt=""></p>
+<h3 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h3><p><strong>综合考虑向量的编码长度和平方误差，得出一种默认配置k’=256,m=8,用64bit表示向量</strong><br><img src="image7.png" alt=""><br><img src="image8.png" alt=""></p>
+<h3 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h3><p><a href="http://yongyuan.name/blog/ann-search.html" target="_blank" rel="noopener">http://yongyuan.name/blog/ann-search.html</a><br><a href="http://blog.csdn.net/mqfcu8/article/details/45023987" target="_blank" rel="noopener">http://blog.csdn.net/mqfcu8/article/details/45023987</a><br><a href="http://vividfree.github.io/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/2017/08/05/understanding-product-quantization" target="_blank" rel="noopener">http://vividfree.github.io/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/2017/08/05/understanding-product-quantization</a></p>
 
           
         
@@ -454,7 +459,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-23T23:57:54+08:00">
                 2017-12-23
@@ -634,7 +639,7 @@ branch: master
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-23T15:19:24+08:00">
                 2017-12-23
@@ -773,7 +778,7 @@ branch: master
                 <a href="/archives/">
               
                   <span class="site-state-item-count">3</span>
-                  <span class="site-state-item-name">posts</span>
+                  <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
             
@@ -786,7 +791,7 @@ branch: master
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
                   <span class="site-state-item-count">2</span>
-                  <span class="site-state-item-name">tags</span>
+                  <span class="site-state-item-name">Tags</span>
                 </a>
               </div>
             
@@ -834,7 +839,7 @@ branch: master
 </div>
 
 
-  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
