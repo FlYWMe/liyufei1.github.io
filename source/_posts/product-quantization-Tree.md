@@ -70,6 +70,12 @@ mathjax: true
 3. 计算向量的最佳线投影，再用线量化与之前的结果进行re-ranking。
 
 ## 实验结果
+
+**数据集**
+
+ANN_SIFT1M dim:128, base:100w, query:1w, learn:10w
+
+
 **On the GPU, sorting the SIFT1M vectors into the bins takes 1051ms, performing the line quantization for these 1M vectors about 458ms (p = 4, k1 = 16, k2 = 8, w = 8).**
 
 In our implementation the maximum number of sortable vectors on the GPU per query is currently limited to 4096 during re-ranking. 
