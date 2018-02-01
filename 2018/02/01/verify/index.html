@@ -123,16 +123,16 @@
 
 
 
-<meta name="description" content="问题：运行reg/search/compare报错CUDA，显存不够用 解决：将caffeThreads设为1">
+<meta name="description" content="0.第一次运行出错：端口、redis   解决：要先启动redis cd /etc/redis/   sudo redis-server ./redis.conf   验证：redis-cli 1.问题：运行reg/search/compare报错CUDA，显存不够用   解决：将caffeThreads设为1 2.端口被占用：lsof -i:33388   解决：kill -9 xxxx 3.测">
 <meta property="og:type" content="article">
 <meta property="og:title" content="verify">
 <meta property="og:url" content="http://yoursite.com/2018/02/01/verify/index.html">
 <meta property="og:site_name" content="Dreamer fly&#39;s blog">
-<meta property="og:description" content="问题：运行reg/search/compare报错CUDA，显存不够用 解决：将caffeThreads设为1">
-<meta property="og:updated_time" content="2018-02-01T02:03:43.549Z">
+<meta property="og:description" content="0.第一次运行出错：端口、redis   解决：要先启动redis cd /etc/redis/   sudo redis-server ./redis.conf   验证：redis-cli 1.问题：运行reg/search/compare报错CUDA，显存不够用   解决：将caffeThreads设为1 2.端口被占用：lsof -i:33388   解决：kill -9 xxxx 3.测">
+<meta property="og:updated_time" content="2018-02-01T02:18:22.213Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="verify">
-<meta name="twitter:description" content="问题：运行reg/search/compare报错CUDA，显存不够用 解决：将caffeThreads设为1">
+<meta name="twitter:description" content="0.第一次运行出错：端口、redis   解决：要先启动redis cd /etc/redis/   sudo redis-server ./redis.conf   验证：redis-cli 1.问题：运行reg/search/compare报错CUDA，显存不够用   解决：将caffeThreads设为1 2.端口被占用：lsof -i:33388   解决：kill -9 xxxx 3.测">
 
 
 
@@ -415,8 +415,28 @@
       
 
       
-        <p>问题：运行reg/search/compare报错CUDA，显存不够用</p>
-<p>解决：将caffeThreads设为1</p>
+        <p>0.第一次运行出错：端口、redis</p>
+<p>  解决：要先启动redis</p>
+<pre><code>cd /etc/redis/  
+sudo redis-server ./redis.conf
+</code></pre><p>  验证：redis-cli</p>
+<p>1.问题：运行reg/search/compare报错CUDA，显存不够用</p>
+<p>  解决：将caffeThreads设为1</p>
+<p>2.端口被占用：lsof -i:33388</p>
+<p>  解决：kill -9 xxxx</p>
+<p>3.测试base64编码，运行带有opencv库</p>
+<p>  解决：gcc Test.c -o Test `pkg-config –cflags –libs opencv `</p>
+<p>4.git相关：</p>
+<ul>
+<li>git fetch origin develop 取回远程分支更新</li>
+<li>git pull origin develop:dev-lyf<br> =git fetch origin + git merge origin/develop</li>
+<li>git checkout -b dev-lyf</li>
+<li>git reset –hard 清除本地修改</li>
+<li>git add cudascan.cu</li>
+<li>git commit -m “update”</li>
+<li>git push origin lyf</li>
+<li>在分支右侧发pull request</li>
+</ul>
 
       
     </div>
@@ -450,6 +470,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/02/01/tips/" rel="prev" title="tips">
+                tips <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -521,7 +545,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

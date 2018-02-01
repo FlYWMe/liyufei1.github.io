@@ -312,6 +312,135 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/01/tips/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="fly">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dreamer fly's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/02/01/tips/" itemprop="url">tips</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-02-01T10:05:16+08:00">
+                2018-02-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>1.运行matlab：matlab -nosplash -nodesktop -r test</p>
+<p>2.ps:将某个进程显示出来</p>
+<ul>
+<li>-A 　显示所有程序。</li>
+<li>-e 　此参数的效果和指定”A”参数相同。</li>
+<li>-f 　显示UID,PPIP,C与STIME栏位。</li>
+<li>grep命令是查找，中间的|是管道命令，是指ps命令与grep同时执行</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/01/verify/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -407,8 +536,28 @@
       
         
           
-            <p>问题：运行reg/search/compare报错CUDA，显存不够用</p>
-<p>解决：将caffeThreads设为1</p>
+            <p>0.第一次运行出错：端口、redis</p>
+<p>  解决：要先启动redis</p>
+<pre><code>cd /etc/redis/  
+sudo redis-server ./redis.conf
+</code></pre><p>  验证：redis-cli</p>
+<p>1.问题：运行reg/search/compare报错CUDA，显存不够用</p>
+<p>  解决：将caffeThreads设为1</p>
+<p>2.端口被占用：lsof -i:33388</p>
+<p>  解决：kill -9 xxxx</p>
+<p>3.测试base64编码，运行带有opencv库</p>
+<p>  解决：gcc Test.c -o Test `pkg-config –cflags –libs opencv `</p>
+<p>4.git相关：</p>
+<ul>
+<li>git fetch origin develop 取回远程分支更新</li>
+<li>git pull origin develop:dev-lyf<br> =git fetch origin + git merge origin/develop</li>
+<li>git checkout -b dev-lyf</li>
+<li>git reset –hard 清除本地修改</li>
+<li>git add cudascan.cu</li>
+<li>git commit -m “update”</li>
+<li>git push origin lyf</li>
+<li>在分支右侧发pull request</li>
+</ul>
 
           
         
@@ -1151,7 +1300,7 @@ branch: master
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
