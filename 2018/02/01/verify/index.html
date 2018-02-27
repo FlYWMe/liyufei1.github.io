@@ -129,7 +129,7 @@
 <meta property="og:url" content="http://yoursite.com/2018/02/01/verify/index.html">
 <meta property="og:site_name" content="Dreamer fly&#39;s blog">
 <meta property="og:description" content="0.第一次运行出错：端口、redis   解决：要先启动redis cd /etc/redis/   sudo redis-server ./redis.conf   验证：redis-cli 1.问题：运行reg/search/compare报错CUDA，显存不够用   解决：将caffeThreads设为1 2.端口被占用：lsof -i:33388   解决：kill -9 xxxx 3.测">
-<meta property="og:updated_time" content="2018-02-02T07:39:11.288Z">
+<meta property="og:updated_time" content="2018-02-27T03:34:16.544Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="verify">
 <meta name="twitter:description" content="0.第一次运行出错：端口、redis   解决：要先启动redis cd /etc/redis/   sudo redis-server ./redis.conf   验证：redis-cli 1.问题：运行reg/search/compare报错CUDA，显存不够用   解决：将caffeThreads设为1 2.端口被占用：lsof -i:33388   解决：kill -9 xxxx 3.测">
@@ -435,6 +435,9 @@ sudo redis-server ./redis.conf
 <li>git add cudascan.cu</li>
 <li>git commit -m “update”</li>
 <li>git push origin lyf 有冲突-f</li>
+<li>git tag -a v0.1.0 -m “release 0.1.0 version”</li>
+<li>git tag -d v0.1.2</li>
+<li>git push origin master &amp; git push origin –tags</li>
 <li>在分支右侧发pull request</li>
 </ul>
 
